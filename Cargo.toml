@@ -1,0 +1,11 @@
+[package]
+name = "lineflow"
+version = "0.1.0"
+authors = ["tempo <temposolomon808@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nannou = "0.18.1"
+nannou_osc = "0.18.0"
