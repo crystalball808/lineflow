@@ -18,42 +18,61 @@ fn view(app: &App, frame: Frame) {
     let rect_size: f32 = 100.;
 
     let rect_count = (win.w() - pad * 2.) / rect_size;
-    dbg!(rect_count);
+    let row_count = (win.h() - pad * 2.) / rect_size;
 
-    for rect_i in 0..rect_count as u32 {
-        let rect = Rect::from_w_h(rect_size, rect_size)
-            .top_left_of(win.pad_left(rect_i as f32 * (rect_size + pad)));
-
-        let lines_count = 4.;
-        let reserved_line_space = rect_size / lines_count;
-
-        let line_weight = reserved_line_space * 0.5;
-
-        for line_number in 0..lines_count as u32 {
-            let points = generate_gradient_line_points(
-                pt2(
-                    rect.left(),
-                    rect.top()
-                        - reserved_line_space * line_number as f32
-                        - reserved_line_space / 2.,
-                ),
-                pt2(
-                    rect.right(),
-                    rect.top()
-                        - reserved_line_space * line_number as f32
-                        - reserved_line_space / 2.,
-                ),
-                time,
-                (line_number * 20) as f32,
+    for row_i in 0..row_count as u32 {
+        for rect_i in 0..rect_count as u32 {
+            let rect = Rect::from_w_h(rect_size, rect_size).top_left_of(
+                win.pad_left(rect_i as f32 * (rect_size + pad))
+                    .pad_top(row_i as f32 * (rect_size + pad)),
             );
-            draw.polyline().weight(line_weight).points_colored(points);
+
+            let lines_count = 4.;
+            let reserved_line_space = rect_size / lines_count;
+
+            let line_weight = reserved_line_space * 0.5;
+
+            for line_number in 0..lines_count as u32 {
+                let is_vertical = rect_i % 2 == 1;
+
+                let line_start = if is_vertical {
+                    pt2(
+                        rect.left() + reserved_line_space * line_number as f32,
+                        rect.top(),
+                    )
+                } else {
+                    pt2(
+                        rect.left(),
+                        rect.top()
+                            - reserved_line_space * line_number as f32
+                            - reserved_line_space / 2.,
+                    )
+                };
+
+                let line_end = if is_vertical {
+                    pt2(
+                        rect.left() + reserved_line_space * line_number as f32,
+                        rect.bottom(),
+                    )
+                } else {
+                    pt2(
+                        rect.right(),
+                        rect.top()
+                            - reserved_line_space * line_number as f32
+                            - reserved_line_space / 2.,
+                    )
+                };
+
+                let points = generate_gradient_line_points(
+                    line_start,
+                    line_end,
+                    time,
+                    (line_number * 2 + rect_i + row_i) as f32 * 10.,
+                );
+                draw.polyline().weight(line_weight).points_colored(points);
+            }
         }
     }
-
-    // let points = generate_gradient_line_points(win.bottom_left(), win.top_right(), app.time, 0.);
-    // draw.polyline().weight(10.).points_colored(points);
-    // let points = generate_gradient_line_points(win.top_left(), win.bottom_right(), app.time, 0.);
-    // draw.polyline().weight(10.).points_colored(points);
 
     draw.to_frame(&app, &frame).unwrap();
 }
