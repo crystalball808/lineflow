@@ -1,3 +1,5 @@
+use nannou::prelude::*;
+
 pub fn generate_gradient_line_points(
     start: Point2,
     end: Point2,
