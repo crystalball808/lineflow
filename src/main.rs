@@ -33,11 +33,13 @@ fn view(app: &App, frame: Frame) {
             let line_weight = reserved_line_space * 0.5;
 
             for line_number in 0..lines_count as u32 {
-                let is_vertical = rect_i % 2 == 1;
+                let is_vertical = (rect_i + row_i) % 2 == 1;
 
                 let line_start = if is_vertical {
                     pt2(
-                        rect.left() + reserved_line_space * line_number as f32,
+                        rect.left()
+                            + reserved_line_space * line_number as f32
+                            + reserved_line_space / 2.,
                         rect.top(),
                     )
                 } else {
@@ -51,7 +53,9 @@ fn view(app: &App, frame: Frame) {
 
                 let line_end = if is_vertical {
                     pt2(
-                        rect.left() + reserved_line_space * line_number as f32,
+                        rect.left()
+                            + reserved_line_space * line_number as f32
+                            + reserved_line_space / 2.,
                         rect.bottom(),
                     )
                 } else {
