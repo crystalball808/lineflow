@@ -13,12 +13,17 @@ fn view(app: &App, frame: Frame) {
 
     draw.background().color(STEELBLUE);
 
-    let pad: f32 = 10.;
+    let pad: f32 = 0.;
     let win = app.window_rect();
-    let rect_size: f32 = 100.;
+    let rect_size: f32 = app.mouse.x + win.w() / 2.;
 
     let rect_count = (win.w() - pad * 2.) / rect_size;
     let row_count = (win.h() - pad * 2.) / rect_size;
+
+    let lines_count = (win.h() / (app.mouse.y + win.h() / 2.))
+        .trunc()
+        .max(1.)
+        .min(10.);
 
     for row_i in 0..row_count as u32 {
         for rect_i in 0..rect_count as u32 {
@@ -30,10 +35,9 @@ fn view(app: &App, frame: Frame) {
                     .pad_top(row_i as f32 * (rect_size + pad)),
             );
 
-            let lines_count = 4.;
             let reserved_line_space = rect_size / lines_count;
 
-            let line_weight = reserved_line_space * 0.5;
+            let line_weight = reserved_line_space * 0.8;
 
             for line_number in 0..lines_count as u32 {
                 let line_start = if is_vertical {
