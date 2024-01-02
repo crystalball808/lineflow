@@ -17,8 +17,8 @@ fn view(app: &App, frame: Frame) {
     let win = app.window_rect();
     let rect_size: f32 = app.mouse.x + win.w() / 2.;
 
-    let rect_count = (win.w() - pad * 2.) / rect_size;
-    let row_count = (win.h() - pad * 2.) / rect_size;
+    let rect_count = ((win.w() - pad * 2.) / rect_size).ceil();
+    let row_count = ((win.h() - pad * 2.) / rect_size).ceil();
 
     let lines_count = (win.h() / (app.mouse.y + win.h() / 2.))
         .trunc()
@@ -77,14 +77,14 @@ fn view(app: &App, frame: Frame) {
                         line_end,
                         line_start,
                         time,
-                        (line_number * 2 + rect_i + row_i) as f32 * 10.,
+                        (line_number * 3 + rect_i + row_i) as f32 * 10.,
                     )
                 } else {
                     generate_gradient_line_points(
                         line_start,
                         line_end,
                         time,
-                        (line_number * 2 + rect_i + row_i) as f32 * 10.,
+                        (line_number * 3 + rect_i + row_i) as f32 * 10.,
                     )
                 };
                 draw.polyline().weight(line_weight).points_colored(points);
